@@ -27,7 +27,7 @@ const faisal_broadcast_number = '919967090690@c.us'
 const sf_broadcast_number = '120363042167400952@g.us'
 const rbc_broadcast_number = '120363026790641248@g.us'
 const nh_broadcast_number = '120363027712978846@g.us'
-const nh_2_broadcast_number = '120363151406965045@g.us' //'120363047942288996@g.us' //'120363046162310181@g.us'  
+const nh_2_broadcast_number = '120363151406965045@g.us' //'120363047942288996@g.us' //'120363046162310181@g.us'
 const standard_broadcast_number = '120363029595719509@g.us'
 const anas_broadcast_number = '120363048328445528@g.us'
 const czar_broadcast_number = '120363027382438815@g.us'
@@ -235,7 +235,7 @@ function processCityBroadcast(chatMsgText, price, descIsSinglePara) {
     //     processedDesc = processedDesc.join(' ')
     // } else {
     //     processedDesc = processedDesc.join('\n')
-    // } 
+    // }
     // return processedDesc;
 
     return descIsSinglePara ? processedDesc.join(' ') : processedDesc = processedDesc.join('\n')
@@ -509,7 +509,7 @@ function initializeSuppliers(suppliers) {
     })
 
     Object.freeze(suppliers)
-    for (key in suppliers) {
+    for (let key in suppliers) {
         Object.freeze(suppliers[[key]])
     }
 
