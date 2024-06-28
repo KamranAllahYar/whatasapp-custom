@@ -49,7 +49,7 @@ const client = new Client({
     authStrategy: new LocalAuth(), //{ clientId: userConfig.sessionName }
     takeoverOnConflict: true,
     puppeteer: { headless: false, executablePath: process.env.CHROME_PATH, args: ['--no-sandbox', "--disabled-setupid-sandbox"] },
-    webVersionCache: { type: 'remote', remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2412.54.html', }
+    webVersionCache: { type: 'remote', remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2413.51-beta.html', }
 })
 
 const positiveResponses = ['yes', 'Yes', 'Yed', 'yed', 'Ys', 'ys', 'Available', 'available', 'avl', 'Avl', 'Abl', 'abl', 'Hai', 'hai', 'Okay', 'ok', 'Ok', 'okay', 'k', 'K', 'yss', 'Yss', 'All available', 'all available', 'yes all', 'yes available']
@@ -81,17 +81,17 @@ async function startMessagesForwarding() {
     const msg = messagesToBeForwarded.shift();
     console.log('messagesToBeForwarded.length', messagesToBeForwarded.length);
 
-    if (msg.type === 'image') {
+    if (msg.type == 'image') {
         const media = await msg.downloadMedia();
-        if (media === undefined) {
-            startMessagesForwarding().then();
+        if (media == undefined) {
+            startMessagesForwarding();
             return
         }
 
         const sentMsg = await client.sendMessage(resellersGroupId, new MessageMedia('image/jpeg', media.data));
         msgIdAwaitingAck = sentMsg.id._serialized;
         msgAwaitingAck = sentMsg;
-    } else if (msg.type === 'chat') {
+    } else if (msg.type == 'chat') {
         const sentMsg = await client.sendMessage(resellersGroupId, msg.body);
 
         msgIdAwaitingAck = sentMsg.id._serialized;
@@ -107,7 +107,7 @@ async function replyToPendingInquiries(productFilepath) {
     const productData = imageMatcher.getProductData(productDataPath);
 
     const product = productData.find(product => {
-        return product[1] === productFilepath;
+        return product[1] == productFilepath;
     });
 
     const available = product[3];
@@ -152,7 +152,7 @@ async function replyToPendingInquiries(productFilepath) {
 
 const suppliers = desc_processor.initializeSuppliers(desc_processor.suppliers);
 
-client.initialize().then();
+client.initialize();
 
 client.on('qr', qr => {
     qrcode.generate(qr, { small: true });
@@ -162,7 +162,7 @@ client.on('disconnected', (reason) => {
     console.log('Client disconnected');
     console.log(reason);
 
-    client.initialize().then();
+    client.initialize();
 });
 
 client.on('authenticated', (session) => {
@@ -229,23 +229,33 @@ client.on('ready', async () => {
 
 
         //
-        const lastSentMsgIndex = lastMsgsInResellerGroup.findIndex(msg => msg.id._serialized === msgIdAwaitingAck);
+        const lastSentMsgIndex = lastMsgsInResellerGroup.findIndex(msg => msg.id._serialized == msgIdAwaitingAck);
         console.log('lastSentMsgIndex', lastSentMsgIndex);
 
-        if (lastSentMsgIndex === -1) {
+        if (lastSentMsgIndex == -1) {
+
             if (!!msgAwaitingAck) return;
-            if (msgAwaitingAck.type === 'chat') {
+
+
+
+            if (msgAwaitingAck.type == 'chat') {
+
                 messagesToBeForwarded.unshift(msgAwaitingAck);
+
                 msgAwaitingAck = null;
                 msgIdAwaitingAck = null;
                 awaitingAck = false;
-                startMessagesForwarding().then();
-            } else if (msgAwaitingAck.type === 'image') {
+                startMessagesForwarding();
+
+            } else if (msgAwaitingAck.type == 'image') {
+
                 messagesToBeForwarded.unshift(msgAwaitingAck);
+
                 msgAwaitingAck = null;
                 msgIdAwaitingAck = null;
                 awaitingAck = false;
-                startMessagesForwarding().then();
+                startMessagesForwarding();
+
                 // try {
                 //     await msgAwaitingAck.downloadMedia()
                 //     console.log('Image downloaded successfully after ack was not received for too long.')
@@ -279,7 +289,7 @@ client.on('ready', async () => {
         msgAwaitingAck = null;
         msgIdAwaitingAck = null;
         awaitingAck = false;
-        startMessagesForwarding().then();
+        startMessagesForwarding();
 
     }, (3600 * 0.05) * 1000)
 
@@ -287,23 +297,24 @@ client.on('ready', async () => {
 
 client.on('message', async message => {
     const chatId = (await message.getChat()).id._serialized
-    if (chatId === temp_messages_chat) {
+    if (chatId == temp_messages_chat) {
         console.log('Debug message received...')
 
-        if (message.type !== 'chat') return;
-        if (message.body === 'start messages forwarding') {
+        if (message.type != 'chat') return;
+
+        if (message.body == 'start messages forwarding') {
             console.log(`Pending messages length:`, messagesToBeForwarded.length);
             console.log('Awaiting Ack:', awaitingAck);
             console.log('Message Id:', msgIdAwaitingAck);
-            console.log('Message type:', msgAwaitingAck?.type);
+            console.log('Message type:', msgAwaitingAck.type);
 
             awaitingAck = false;
 
-            startMessagesForwarding().then();
+            startMessagesForwarding();
             return;
         }
 
-        if (message.body === 'check pending messages') {
+        if (message.body == 'check pending messages') {
             console.log(`Pending messages length:`, messagesToBeForwarded.length);
             console.log('Awaiting Ack:', awaitingAck);
             console.log('Message Id:', msgIdAwaitingAck);
@@ -314,7 +325,7 @@ client.on('message', async message => {
             const lastSentMsgIndex = lastMsgsInResllerGroup.findIndex(msg => msg.id._serialized == msgIdAwaitingAck);
             console.log('lastSentMsgIndex', lastSentMsgIndex);
 
-            if (lastSentMsgIndex === -1) return
+            if (lastSentMsgIndex == -1) return
 
             const lastSentMsg = lastMsgsInResllerGroup[lastSentMsgIndex];
 
@@ -326,10 +337,10 @@ client.on('message', async message => {
         }
 
         const allChats = await client.getChats()
-        for (const chat of allChats) {
+        allChats.forEach(async (chat) => {
 
             if (chat.name === undefined) {
-                continue;
+                return
             }
 
             if (chat.name.includes(message.body)) {
@@ -339,7 +350,7 @@ client.on('message', async message => {
                 _ = (messageTime.length) ? console.log(messageTime[0].timestamp) : console.log(messageTime)
             }
 
-        }
+        })
     }
 
     const currentTime = new Date(Date.now());
@@ -348,7 +359,7 @@ client.on('message', async message => {
         return;
     }
 
-    if (!['chat','image'].includes(message.type)) {
+    if (!(message.type == 'image' || message.type == 'chat')) {
         return;
     }
 
@@ -366,7 +377,7 @@ client.on('message', async message => {
         const supplier = suppliers[[supplierNumber]];
 
         const supplierMsgs = supplier.msgArray;
-        if (message.type === 'image') {
+        if (message.type == 'image') {
             if (supplierMsgs.length > 0) {
                 const lastMsgTime = supplierMsgs[supplierMsgs.length - 1].timestamp;
                 const timeDifference = message.timestamp - lastMsgTime;
@@ -382,7 +393,7 @@ client.on('message', async message => {
             return
         }
 
-        if (message.type === 'chat') {
+        if (message.type == 'chat') {
             const chatText = message.body
 
             const chatIsDesc = saveBroadcast.classifyText(chatText, supplier.keywords)
@@ -405,7 +416,7 @@ client.on('message', async message => {
                 if (supplier.enable) newBroadcastMsgs.forEach(msg => messagesToBeForwarded.push(msg));
                 console.log(`${senderName} broadcast forwarded. ${getTime()}\n`);
 
-                startMessagesForwarding().then();
+                startMessagesForwarding();
 
                 console.log(`Length of supplier messages of ${senderName} before saving the broadcast. ${(newBroadcastMsgs.slice()).length}. ${getTime()}\n`)
                 await waitForAvailableSlot();
@@ -417,7 +428,7 @@ client.on('message', async message => {
                 console.log('chatIsDesc', chatIsDesc, 'supplierMsgs.length', supplierMsgs.length)
 
                 if (chatText.length > 100 && !responseIsValid) {
-                    if (supplierMsgs.length === 0) return;
+                    if (supplierMsgs.length == 0) return;
 
                     const lastMsgTime = supplierMsgs[supplierMsgs.length - 1].timestamp
                     const timeDifference = message.timestamp - lastMsgTime
@@ -442,11 +453,11 @@ client.on('message', async message => {
 
         console.log(senderName, message.type)
 
-        if (message.type === 'chat') {
+        if (message.type == 'chat') {
             const isRequestForPaymentDetails = saveBroadcast.classifyText(message.body.toLowerCase(), [['scanner', 'pay', 'phonepe', 'phnpe', 'qr', 'upi', 'number'],
             [false, 'done', 'kitna', 'kiya', 'problem', 'from', 'ref', 'order', 'check', 'receive', 'available', 'kardi', 'track', 'trak', 'not interested', 'my']])
             if (isRequestForPaymentDetails) {
-                message.reply(MessageMedia.fromFilePath('./paymentInfo.jpeg')).then()
+                message.reply(MessageMedia.fromFilePath('./paymentInfo.jpeg'))
                 return
             }
         }
@@ -756,11 +767,11 @@ client.on('message_create', async message => {
 
 client.on('message_ack', (msg, ack) => {
 
-    if (msg.id._serialized === msgIdAwaitingAck && ack >= 1 && awaitingAck) {
+    if (msg.id._serialized == msgIdAwaitingAck && ack >= 1 && awaitingAck) {
         msgAwaitingAck = null;
         msgIdAwaitingAck = null;
         awaitingAck = false;
-        startMessagesForwarding().then();
+        startMessagesForwarding();
     }
 
 })
