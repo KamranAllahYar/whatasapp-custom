@@ -1,6 +1,6 @@
 {
    "disable-features": "AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,BackForwardCache,Translate",
-   "enable-features": "NetworkServiceInProcess2,*SearchEngineChoiceTrigger\u003CWaffleStudy,UkmSamplingRate\u003CUkmSamplingRate",
+   "enable-features": "NetworkServiceInProcess2,UkmSamplingRate\u003CUkmSamplingRate",
    "force-fieldtrial-params": "UkmSamplingRate.Sampled_NoSeed_Stable:_default_sampling/1000000",
-   "force-fieldtrials": "UkmSamplingRate/Sampled_NoSeed_Stable/*WaffleStudy/Default"
+   "force-fieldtrials": "UkmSamplingRate/Sampled_NoSeed_Stable"
 }
