@@ -48,8 +48,8 @@ const client = new Client({
 
     authStrategy: new LocalAuth(), //{ clientId: userConfig.sessionName }
     takeoverOnConflict: true,
-    puppeteer: { headless: false, executablePath: process.env.CHROME_PATH, args: ['--no-sandbox', "--disabled-setupid-sandbox"] },
-    webVersionCache: { type: 'remote', remotePath: 'https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.3000.1014580163-alpha.html', }
+    puppeteer: { headless: false, executablePath: process.env.CHROME_PATH },
+    webVersionCache: { type: 'none' }
 })
 
 const positiveResponses = ['yes', 'Yes', 'Yed', 'yed', 'Ys', 'ys', 'Available', 'available', 'avl', 'Avl', 'Abl', 'abl', 'Hai', 'hai', 'Okay', 'ok', 'Ok', 'okay', 'k', 'K', 'yss', 'Yss', 'All available', 'all available', 'yes all', 'yes available']
