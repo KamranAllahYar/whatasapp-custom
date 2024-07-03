@@ -24,9 +24,8 @@ function releaseSlot() {
 }
 
 
-
-const { Client, LocalAuth } = require('whatsapp-web.js');
-const { MessageMedia } = require('whatsapp-web.js')
+const {Client, LocalAuth} = require('whatsapp-web.js');
+const {MessageMedia} = require('whatsapp-web.js')
 const qrcode = require('qrcode-terminal');
 // const cv = require('@u4/opencv4nodejs');
 const fs = require('fs');
@@ -48,8 +47,11 @@ const client = new Client({
 
     authStrategy: new LocalAuth(), //{ clientId: userConfig.sessionName }
     takeoverOnConflict: true,
-    puppeteer: { headless: false, executablePath: process.env.CHROME_PATH },
-    webVersionCache: { type: 'none' }
+    puppeteer: {
+        headless: false,
+        executablePath: process.env.CHROME_PATH,
+        args: ['--no-sandbox', "--disabled-setupid-sandbox"]
+    },
 })
 
 const positiveResponses = ['yes', 'Yes', 'Yed', 'yed', 'Ys', 'ys', 'Available', 'available', 'avl', 'Avl', 'Abl', 'abl', 'Hai', 'hai', 'Okay', 'ok', 'Ok', 'okay', 'k', 'K', 'yss', 'Yss', 'All available', 'all available', 'yes all', 'yes available']
@@ -155,7 +157,7 @@ const suppliers = desc_processor.initializeSuppliers(desc_processor.suppliers);
 client.initialize();
 
 client.on('qr', qr => {
-    qrcode.generate(qr, { small: true });
+    qrcode.generate(qr, {small: true});
 });
 
 client.on('disconnected', (reason) => {
@@ -216,7 +218,7 @@ client.on('ready', async () => {
 
     setInterval(async () => {
 
-        const lastMsgsInResellerGroup = (await (await client.getChatById(resellersGroupId)).fetchMessages({ limit: 20 }));
+        const lastMsgsInResellerGroup = (await (await client.getChatById(resellersGroupId)).fetchMessages({limit: 20}));
         if (!lastMsgsInResellerGroup.length) return
 
         console.log(`messagesToBeForwarded.length`, messagesToBeForwarded.length);
@@ -235,7 +237,6 @@ client.on('ready', async () => {
         if (lastSentMsgIndex == -1) {
 
             if (!!msgAwaitingAck) return;
-
 
 
             if (msgAwaitingAck.type == 'chat') {
@@ -280,7 +281,6 @@ client.on('ready', async () => {
         if ((Math.round(elapsedTimeSinceLastMessageSentInResellerGroup / 36) / 100 * 60) < 2) return;
 
 
-
         console.log('lastMsgsInResellerGroup[0].ack', lastMsgsInResellerGroup[0].ack)
         console.log('!!msgAwaitingAck', !!msgAwaitingAck);
         if (!!msgAwaitingAck) console.log('msgAwaitingAck.type', msgAwaitingAck.type);
@@ -320,7 +320,7 @@ client.on('message', async message => {
             console.log('Message Id:', msgIdAwaitingAck);
             if (!!msgAwaitingAck) console.log('Message type:', msgAwaitingAck.type);
 
-            const lastMsgsInResllerGroup = (await (await client.getChatById(resellersGroupId)).fetchMessages({ limit: 50 }))
+            const lastMsgsInResllerGroup = (await (await client.getChatById(resellersGroupId)).fetchMessages({limit: 50}))
 
             const lastSentMsgIndex = lastMsgsInResllerGroup.findIndex(msg => msg.id._serialized == msgIdAwaitingAck);
             console.log('lastSentMsgIndex', lastSentMsgIndex);
@@ -344,7 +344,7 @@ client.on('message', async message => {
             }
 
             if (chat.name.includes(message.body)) {
-                const messageTime = (await chat.fetchMessages({ limit: 1 }))
+                const messageTime = (await chat.fetchMessages({limit: 1}))
 
                 console.log(`${chat.name} = ${chat.id._serialized}`);
                 _ = (messageTime.length) ? console.log(messageTime[0].timestamp) : console.log(messageTime)
@@ -455,7 +455,7 @@ client.on('message', async message => {
 
         if (message.type == 'chat') {
             const isRequestForPaymentDetails = saveBroadcast.classifyText(message.body.toLowerCase(), [['scanner', 'pay', 'phonepe', 'phnpe', 'qr', 'upi', 'number'],
-            [false, 'done', 'kitna', 'kiya', 'problem', 'from', 'ref', 'order', 'check', 'receive', 'available', 'kardi', 'track', 'trak', 'not interested', 'my']])
+                [false, 'done', 'kitna', 'kiya', 'problem', 'from', 'ref', 'order', 'check', 'receive', 'available', 'kardi', 'track', 'trak', 'not interested', 'my']])
             if (isRequestForPaymentDetails) {
                 message.reply(MessageMedia.fromFilePath('./paymentInfo.jpeg'))
                 return
@@ -807,7 +807,6 @@ client.on('message_ack', (msg, ack) => {
 //         if (!!msgAwaitingAck) return;
 
 
-
 //         if (msgAwaitingAck.type == 'chat') {
 
 //             messagesToBeForwarded.unshift(msgAwaitingAck);
@@ -848,7 +847,6 @@ client.on('message_ack', (msg, ack) => {
 //     console.log('lastSentMsg.ack', lastSentMsg.ack);
 
 //     if ((Math.round(elapsedTimeSinceLastMessageSentInResellerGroup / 36) / 100 * 60) < 2) return;
-
 
 
 //     console.log('lastMsgsInResellerGroup[0].ack', lastMsgsInResellerGroup[0].ack)
