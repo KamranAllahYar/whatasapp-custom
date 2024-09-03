@@ -27,7 +27,7 @@ const faisal_broadcast_number = '919967090690@c.us'
 const sf_broadcast_number = '120363042167400952@g.us'
 const rbc_broadcast_number = '120363026790641248@g.us'
 const nh_broadcast_number = '120363027712978846@g.us'
-const nh_2_broadcast_number = '120363151406965045@g.us' //'120363047942288996@g.us' //'120363046162310181@g.us'  
+const nh_2_broadcast_number = '120363151406965045@g.us' //'120363047942288996@g.us' //'120363046162310181@g.us'
 const standard_broadcast_number = '120363029595719509@g.us'
 const anas_broadcast_number = '120363048328445528@g.us'
 const czar_broadcast_number = '120363027382438815@g.us'
@@ -45,6 +45,7 @@ const nf_broadcast_number = '120363046341331934@g.us'
 const craze_broadcast_number = '120363151535627216@g.us'
 const saad_broadcast_number = '919619202021@c.us';
 const bts_imported_bags_broadcast_number = "120363211179526430@g.us";
+const dreamzz_bags_broadcast = "120363328339119089@g.us";
 
 
 const hafiz_inquiry_group = '919029359545@c.us'
@@ -64,6 +65,7 @@ const city_inquiry_group = '919029359545@c.us'
 const test_inquiry_group = '919029359545@c.us'
 const nf_inquiry_group = '919029359545@c.us'
 const craze_inquiry_group = '919029359545@c.us'
+const dreamzz_bags_inquiry_group = '918286742730@c.us'
 
 // 96952 85901
 
@@ -235,7 +237,7 @@ function processCityBroadcast(chatMsgText, price, descIsSinglePara) {
     //     processedDesc = processedDesc.join(' ')
     // } else {
     //     processedDesc = processedDesc.join('\n')
-    // } 
+    // }
     // return processedDesc;
 
     return descIsSinglePara ? processedDesc.join(' ') : processedDesc = processedDesc.join('\n')
@@ -450,10 +452,17 @@ const suppliers = {
         name: 'Faisal Bags SPL', processingFunction: processFaisalBroadcast
     },
 
-    [aamir_broadcast_number]: {
+    // [aamir_broadcast_number]: {
+    //     msgArray: [], inquiriesArray: [],
+    //     enable: true, keywords: [['At just', 'AT JUST', 'PRICE', 'Rate only', 'fixed price', 'shipping', 'Shipping', 'price', 'Price']],
+    //     inquiryGroup: '918286742730@c.us',
+    //     name: 'Dreamzz Bags', processingFunction: processDreamzzBroadcast
+    // },
+
+    [dreamzz_bags_broadcast]: {
         msgArray: [], inquiriesArray: [],
         enable: true, keywords: [['At just', 'AT JUST', 'PRICE', 'Rate only', 'fixed price', 'shipping', 'Shipping', 'price', 'Price']],
-        inquiryGroup: '918286742730@c.us',
+        inquiryGroup: dreamzz_bags_inquiry_group,
         name: 'Dreamzz Bags', processingFunction: processDreamzzBroadcast
     },
 
