@@ -46,6 +46,7 @@ const craze_broadcast_number = '120363151535627216@g.us'
 const saad_broadcast_number = '919619202021@c.us';
 const bts_imported_bags_broadcast_number = "120363211179526430@g.us";
 const dreamzz_bags_broadcast = "120363328339119089@g.us";
+const united_bags_broadcast = "120363139394297363@g.us";
 
 
 const hafiz_inquiry_group = '919029359545@c.us'
@@ -66,6 +67,7 @@ const test_inquiry_group = '919029359545@c.us'
 const nf_inquiry_group = '919029359545@c.us'
 const craze_inquiry_group = '919029359545@c.us'
 const dreamzz_bags_inquiry_group = '918286742730@c.us'
+const united_bags_inquiry_group = '917666664601@c.us'
 
 // 96952 85901
 
@@ -464,6 +466,13 @@ const suppliers = {
         enable: true, keywords: [['At just', 'AT JUST', 'PRICE', 'Rate only', 'fixed price', 'shipping', 'Shipping', 'price', 'Price']],
         inquiryGroup: dreamzz_bags_inquiry_group,
         name: 'Dreamzz Bags', processingFunction: processDreamzzBroadcast
+    },
+
+    [united_bags_broadcast]: {
+        msgArray: [], inquiriesArray: [],
+        enable: true, keywords: [['At just', 'AT JUST', 'PRICE', 'Rate only', 'fixed price', 'shipping', 'Shipping', 'price', 'Price']],
+        inquiryGroup: united_bags_inquiry_group,
+        name: 'United Bags', processingFunction: processUBBroadcast
     },
 
     // [bts_imported_bags_broadcast_number]: {
