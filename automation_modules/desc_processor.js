@@ -117,7 +117,7 @@ function processAnasBroadcast(chatMsgText, price, descIsSinglePara) {
     let processedDesc = chatMsgText.split('\n');
     processedDesc = processedDesc.map(line => {
         if (line.includes(price)) {
-            return `Price: ${parseInt(price) + 45}/-`;
+            return `Price: ${parseInt(price) + 25}/-`;
         }
         if (line.includes('ship') || line.includes('Ship') || line.includes('SHIP')) {
             return '';
